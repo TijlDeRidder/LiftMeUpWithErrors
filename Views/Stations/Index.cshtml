@@ -1,0 +1,50 @@
+﻿@model IEnumerable<LiftMeUp2.Models.Station>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.stationName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.isAccesible)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.hasElevator)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+    @if(item.isDeleted == false){
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.stationName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.isAccesible)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.hasElevator)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.stationId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.stationId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.stationId">Delete</a>
+                    </td>
+                </tr>
+    }
+
+}
+    </tbody>
+</table>
