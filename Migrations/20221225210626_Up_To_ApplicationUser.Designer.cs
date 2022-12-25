@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LiftMeUp2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext2))]
-    [Migration("20221224181742_Up_To_ApplicationUser")]
+    [Migration("20221225210626_Up_To_ApplicationUser")]
     partial class Up_To_ApplicationUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -146,6 +146,9 @@ namespace LiftMeUp2.Migrations
                     b.Property<string>("uitleg")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
 
                     b.HasKey("MeldingId");
 

@@ -72,6 +72,7 @@ namespace LiftMeUp2.Migrations
                 {
                     MeldingId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    userId = table.Column<int>(type: "int", nullable: false),
                     liftId = table.Column<int>(type: "int", nullable: false),
                     stationId = table.Column<int>(type: "int", nullable: false),
                     startDate = table.Column<DateTime>(type: "datetime2", nullable: false),

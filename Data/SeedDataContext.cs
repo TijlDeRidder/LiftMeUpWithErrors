@@ -8,17 +8,17 @@ namespace LiftMeUp2.Data
 {
     public class SeedDataContext
     {
-        public static async void Initialize(IServiceProvider serviceProvider, UserManager<ApplicationUser> userManager)
+        public static void Initialize(IApplicationBuilder serviceProvider)
         {
-            using (var context = new ApplicationDbContext2(serviceProvider.GetRequiredService
-                                                              <DbContextOptions<ApplicationDbContext2>>()))
+            using (var service = serviceProvider.ApplicationServices.CreateScope())
             {
-                ApplicationUser admin = null;
-                ApplicationUser tijl = null;
+                var context = service.ServiceProvider.GetService<ApplicationDbContext2>();
+                var userManager = service.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+
                 context.Database.EnsureCreated();    // Zorg dat de databank bestaat
                 if (!context.Users.Any())
                 {
-                    admin = new ApplicationUser
+                    ApplicationUser admin = new ApplicationUser
                     {
                         FirstName = "System",
                         LastName = "Administrator",
@@ -26,7 +26,7 @@ namespace LiftMeUp2.Data
                         Email = "System.Administrator@Test.com",
                         EmailConfirmed = true
                     };
-                    tijl = new ApplicationUser
+                    ApplicationUser tijl = new ApplicationUser
                     {
                         FirstName = "Tijl",
                         LastName = "De Ridder",
@@ -34,12 +34,21 @@ namespace LiftMeUp2.Data
                         Email = "Tijl-de-ridder@hotmail.com",
                         EmailConfirmed = true
                     };
-                    userManager.CreateAsync(admin, "Abc!12345");
-                    userManager.CreateAsync(tijl, "wxcVBN12345!");
+                    var test = userManager.CreateAsync(admin, "Abc!12345").Result;
+                    if (test.Succeeded)
+                    {
+                        userManager.AddToRoleAsync(admin, "SystemAdministrator").Wait();
+                    }
+                    var test1 = userManager.CreateAsync(tijl, "wxcVBN12345!").Result;
+                    if (test1.Succeeded)
+                    {
+                        userManager.AddToRoleAsync(tijl, "User").Wait();
+                    }
+
 
                     context.Roles.AddRange(
                     new IdentityRole { Id = "User", Name = "User", NormalizedName = "USER" },
-                    new IdentityRole { Id = "SystemAdministrator", Name = "SystemAdministrator", NormalizedName = "SystemAdministrator"}
+                    new IdentityRole { Id = "SystemAdministrator", Name = "SystemAdministrator", NormalizedName = "SystemAdministrator" }
                     );
                     context.SaveChanges();
                     context.UserRoles.AddRange
@@ -77,11 +86,6 @@ namespace LiftMeUp2.Data
 
                 }
             }
-        }
-
-        internal static void Initialize(IApplicationBuilder app)
-        {
-            throw new NotImplementedException();
         }
     }
 }

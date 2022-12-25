@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json.Serialization;
+using System.ComponentModel.DataAnnotations;
 namespace LiftMeUp2.Models
 {
     public class Melding
@@ -6,6 +7,8 @@ namespace LiftMeUp2.Models
         public static List<Melding> Meldingen = new List<Melding>();
         [Required]
         public int MeldingId { get; set; }
+        [Required]
+        public int userId { get; set; } 
         [Required]
         public int liftId { get; set; }
         [Required]

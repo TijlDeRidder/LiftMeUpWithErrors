@@ -145,6 +145,9 @@ namespace LiftMeUp2.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
                     b.HasKey("MeldingId");
 
                     b.ToTable("Melding");
