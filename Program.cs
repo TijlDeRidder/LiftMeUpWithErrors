@@ -1,20 +1,17 @@
-﻿using LiftMeUp2.Data;
+using LiftMeUp2.Areas.Identity.Data;
+using LiftMeUp2.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<LiftMeUp2Context>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("LiftMeUp2Context") ?? throw new InvalidOperationException("Connection string 'LiftMeUp2Context' not found.")));
+using Microsoft.Extensions.DependencyInjection;var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContext2Connection");
+builder.Services.AddDbContext<ApplicationDbContext2>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext2>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -46,6 +43,7 @@ app.MapRazorPages();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    SeedDataContext.Initialize(services);
+    var UserManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+    SeedDataContext.Initialize(services, UserManager);
 }
 app.Run();

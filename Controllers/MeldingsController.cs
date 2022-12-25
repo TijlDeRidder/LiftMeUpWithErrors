@@ -12,9 +12,9 @@ namespace LiftMeUp2.Controllers
 {
     public class MeldingsController : Controller
     {
-        private readonly LiftMeUp2Context _context;
+        private readonly ApplicationDbContext2 _context;
 
-        public MeldingsController(LiftMeUp2Context context)
+        public MeldingsController(ApplicationDbContext2 context)
         {
             _context = context;
         }

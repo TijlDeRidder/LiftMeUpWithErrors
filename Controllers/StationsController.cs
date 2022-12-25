@@ -13,9 +13,9 @@ namespace LiftMeUp2.Controllers
 {
     public class StationsController : Controller
     {
-        private readonly LiftMeUp2Context _context;
+        private readonly ApplicationDbContext2 _context;
 
-        public StationsController(LiftMeUp2Context context)
+        public StationsController(ApplicationDbContext2 context)
         {
             _context = context;
         }

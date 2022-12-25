@@ -12,9 +12,9 @@ namespace LiftMeUp2.Controllers
 {
     public class LiftsController : Controller
     {
-        private readonly LiftMeUp2Context _context;
+        private readonly ApplicationDbContext2 _context;
 
-        public LiftsController(LiftMeUp2Context context)
+        public LiftsController(ApplicationDbContext2 context)
         {
             _context = context;
         }
