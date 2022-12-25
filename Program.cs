@@ -10,7 +10,7 @@ builder.Services.AddDbContext<ApplicationDbContext2>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext2>();
 builder.Services.AddControllersWithViews();
 
@@ -44,6 +44,6 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var UserManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-    SeedDataContext.Initialize(app);
+    SeedDataContext.Initialize(services,UserManager);
 }
 app.Run();

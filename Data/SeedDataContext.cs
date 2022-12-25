@@ -8,17 +8,16 @@ namespace LiftMeUp2.Data
 {
     public class SeedDataContext
     {
-        public static void Initialize(IApplicationBuilder serviceProvider)
+        public static async void Initialize(IServiceProvider serviceProvider, UserManager<ApplicationUser> userManager)
         {
-            using (var service = serviceProvider.ApplicationServices.CreateScope())
+            using (var context = new ApplicationDbContext2(serviceProvider.GetRequiredService
+                                                              <DbContextOptions<ApplicationDbContext2>>()))
             {
-                var context = service.ServiceProvider.GetService<ApplicationDbContext2>();
-                var userManager = service.ServiceProvider.GetService<UserManager<ApplicationUser>>();
 
                 context.Database.EnsureCreated();    // Zorg dat de databank bestaat
                 if (!context.Users.Any())
                 {
-                    ApplicationUser admin = new ApplicationUser
+                   ApplicationUser admin = new ApplicationUser
                     {
                         FirstName = "System",
                         LastName = "Administrator",
@@ -26,7 +25,7 @@ namespace LiftMeUp2.Data
                         Email = "System.Administrator@Test.com",
                         EmailConfirmed = true
                     };
-                    ApplicationUser tijl = new ApplicationUser
+                   ApplicationUser tijl = new ApplicationUser
                     {
                         FirstName = "Tijl",
                         LastName = "De Ridder",
@@ -38,17 +37,19 @@ namespace LiftMeUp2.Data
                     if (test.Succeeded)
                     {
                         userManager.AddToRoleAsync(admin, "SystemAdministrator").Wait();
+                         
                     }
-                    var test1 = userManager.CreateAsync(tijl, "wxcVBN12345!").Result;
-                    if (test1.Succeeded)
+                    var test1 = userManager.CreateAsync(tijl, "Abc!12345").Result;
+                    if(test1.Succeeded)
                     {
-                        userManager.AddToRoleAsync(tijl, "User").Wait();
+                        userManager.AddToRoleAsync(tijl, "SystemAdministrator").Wait();
+
                     }
 
 
                     context.Roles.AddRange(
                     new IdentityRole { Id = "User", Name = "User", NormalizedName = "USER" },
-                    new IdentityRole { Id = "SystemAdministrator", Name = "SystemAdministrator", NormalizedName = "SystemAdministrator" }
+                    new IdentityRole { Id = "SystemAdministrator", Name = "SystemAdministrator", NormalizedName = "SYSTEMADMINISTRATOR" }
                     );
                     context.SaveChanges();
                     context.UserRoles.AddRange
